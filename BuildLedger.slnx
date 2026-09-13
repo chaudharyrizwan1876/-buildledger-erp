@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/BuildLedger.App/BuildLedger.App.csproj" />
+    <Project Path="src/BuildLedger.Application/BuildLedger.Application.csproj" />
+    <Project Path="src/BuildLedger.Core/BuildLedger.Core.csproj" />
+    <Project Path="src/BuildLedger.Infrastructure/BuildLedger.Infrastructure.csproj" />
+    <Project Path="src/BuildLedger.Tests/BuildLedger.Tests.csproj" />
+  </Folder>
+</Solution>
