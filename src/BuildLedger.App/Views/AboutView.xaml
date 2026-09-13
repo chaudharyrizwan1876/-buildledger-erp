@@ -1,0 +1,20 @@
+<UserControl x:Class="BuildLedger.App.Views.AboutView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:BuildLedger.App.ViewModels"
+             d:DataContext="{d:DesignInstance vm:AboutViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
+    <StackPanel MaxWidth="560">
+        <TextBlock Text="About BuildLedger ERP" Style="{StaticResource Text.Display}" Margin="0,0,0,20"/>
+        <Border Style="{StaticResource Card}">
+            <StackPanel>
+                <TextBlock Text="BuildLedger ERP" FontSize="18" FontWeight="Bold"/>
+                <TextBlock Text="{Binding AppVersion, StringFormat=Version {0}}" Style="{StaticResource Text.Secondary}" Margin="0,4,0,16"/>
+                <TextBlock Text="A construction material supply, inventory, customer ledger and accounting system for businesses selling steel rebar, cement, sand, gravel, bricks, blocks and related supplies." TextWrapping="Wrap" Margin="0,0,0,16"/>
+                <TextBlock Text="{Binding Framework, StringFormat=Built with: {0}}" Style="{StaticResource Text.Secondary}"/>
+                <TextBlock Text="Runs fully offline using a local SQLite database." Style="{StaticResource Text.Secondary}" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

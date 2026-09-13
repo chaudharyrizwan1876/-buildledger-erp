@@ -1,0 +1,31 @@
+<UserControl x:Class="BuildLedger.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:BuildLedger.App.ViewModels"
+             d:DataContext="{d:DesignInstance vm:SettingsViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
+    <StackPanel MaxWidth="560" HorizontalAlignment="Left">
+        <TextBlock Text="Settings" Style="{StaticResource Text.Display}" Margin="0,0,0,4"/>
+        <TextBlock Text="Business preferences and application behavior" Style="{StaticResource Text.Secondary}" Margin="0,0,0,20"/>
+
+        <Border Style="{StaticResource Card}" Margin="0,0,0,16">
+            <StackPanel>
+                <TextBlock Text="Business Name" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <TextBox Text="{Binding BusinessName, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,16"/>
+
+                <CheckBox Content="Allow negative stock (Admin override for oversold items)" IsChecked="{Binding AllowNegativeStock}" Margin="0,0,0,12"/>
+                <CheckBox Content="Dark theme" IsChecked="{Binding IsDarkTheme}" Margin="0,0,0,12"/>
+
+                <CheckBox Content="Enable automatic daily backup" IsChecked="{Binding AutoBackupEnabled}" Margin="0,0,0,12"/>
+                <TextBlock Text="Auto Backup Time (HH:mm)" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <TextBox Text="{Binding AutoBackupTime, UpdateSourceTrigger=PropertyChanged}" Width="120" HorizontalAlignment="Left"/>
+
+                <TextBlock Text="{Binding SuccessMessage}" Foreground="{DynamicResource Brush.Success}" Margin="0,16,0,0"
+                           Visibility="{Binding SuccessMessage, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+                <Button Content="Save Settings" Command="{Binding SaveCommand}" HorizontalAlignment="Left" Margin="0,16,0,0"/>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

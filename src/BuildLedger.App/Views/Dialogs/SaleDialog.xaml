@@ -1,0 +1,122 @@
+<Window x:Class="BuildLedger.App.Views.Dialogs.SaleDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="New Sale" Height="700" Width="880" WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource Brush.Background}">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="New Sale" Style="{StaticResource Text.H1}" Margin="0,0,0,16"/>
+
+        <Grid Grid.Row="1" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Customer * (name or phone)" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <TextBox Text="{Binding CustomerSearchText, UpdateSourceTrigger=PropertyChanged}" TextChanged="CustomerSearch_TextChanged"/>
+                <ListBox x:Name="CustomerSuggestions" ItemsSource="{Binding CustomerSuggestions}" MaxHeight="120"
+                         Visibility="{Binding ShowSuggestions, Converter={StaticResource BoolToVisibilityConverter}}"
+                         SelectionChanged="CustomerSuggestions_SelectionChanged" Margin="0,4,0,0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="4">
+                                <TextBlock Text="{Binding FullName}" FontWeight="SemiBold"/>
+                                <TextBlock Text=" — " />
+                                <TextBlock Text="{Binding Phone}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Text="{Binding SelectedCustomerLabel}" Style="{StaticResource Text.Caption}" Margin="0,4,0,0"
+                           Visibility="{Binding SelectedCustomerLabel, Converter={StaticResource NullToVisibilityConverter}}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Site (optional)" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <ComboBox ItemsSource="{Binding Sites}" DisplayMemberPath="SiteName" SelectedValuePath="Id" SelectedValue="{Binding SiteId}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="4">
+                <TextBlock Text="Invoice # / Date" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <TextBox Text="{Binding InvoiceNumber, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,6"/>
+                <DatePicker SelectedDate="{Binding SaleDate}"/>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="3" Style="{StaticResource Card}" Padding="0">
+            <DockPanel>
+                <Button DockPanel.Dock="Top" Content="+ Add Line" Style="{StaticResource Button.Secondary}"
+                        HorizontalAlignment="Left" Margin="12" Click="AddLine_Click"/>
+                <DataGrid ItemsSource="{Binding Lines}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridComboBoxColumn Header="Product" ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                 DisplayMemberPath="Name" SelectedValuePath="Id" SelectedValueBinding="{Binding ProductId}" Width="*"/>
+                        <DataGridTextColumn Header="Available Stock" Binding="{Binding AvailableStock}" Width="120" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                        <DataGridTextColumn Header="Unit Rate" Binding="{Binding UnitRate, UpdateSourceTrigger=PropertyChanged}" Width="110"/>
+                        <DataGridTextColumn Header="Line Total" Binding="{Binding LineTotal, StringFormat={}Rs. {0:N0}}" Width="120" IsReadOnly="True"/>
+                        <DataGridTemplateColumn Header="" Width="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Remove" Style="{StaticResource Button.Secondary}" Padding="8,2" Click="RemoveLine_Click" Tag="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Row="4" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="160"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" Tag="Notes (optional)"/>
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="Discount" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <TextBox Text="{Binding DiscountAmount, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="4">
+                <TextBlock Text="Paid Now" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <TextBox Text="{Binding AmountPaidNow, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="6">
+                <TextBlock Text="Payment Method" Style="{StaticResource Text.Caption}" Margin="0,0,0,6"/>
+                <ComboBox ItemsSource="{Binding PaymentMethods}" SelectedItem="{Binding PaymentMethod}"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="5" Margin="0,16,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Total: " FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding Total, StringFormat={}Rs. {0:N0}}" FontWeight="Bold" FontSize="16"/>
+                <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource Brush.Danger}" Margin="20,0,0,0"
+                           Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}"/>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="Cancel" Style="{StaticResource Button.Secondary}" Click="Cancel_Click" Margin="0,0,8,0"/>
+                <Button Content="Save Sale" Click="Save_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,9 +1,23 @@
-﻿<Application x:Class="BuildLedger.App.App"
+<Application x:Class="BuildLedger.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:BuildLedger.App"
-             StartupUri="MainWindow.xaml">
+             xmlns:conv="clr-namespace:BuildLedger.App.Converters">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary x:Name="ThemeColors" Source="Themes/Colors.Light.xaml"/>
+                <ResourceDictionary Source="Themes/Typography.xaml"/>
+                <ResourceDictionary Source="Themes/Controls.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <conv:InverseBoolConverter x:Key="InverseBoolConverter"/>
+            <conv:BalanceToBrushConverter x:Key="BalanceToBrushConverter"/>
+            <conv:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
+            <conv:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
+            <conv:DecimalToCurrencyConverter x:Key="DecimalToCurrencyConverter"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

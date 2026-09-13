@@ -1,0 +1,37 @@
+<UserControl x:Class="BuildLedger.App.Views.PaymentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:BuildLedger.App.ViewModels"
+             d:DataContext="{d:DesignInstance vm:PaymentsViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Payments &amp; Receipts" Style="{StaticResource Text.Display}"/>
+                <TextBlock Text="Advance, partial, full and invoice-specific payments" Style="{StaticResource Text.Secondary}" Margin="0,4,0,0"/>
+            </StackPanel>
+            <Button Grid.Column="1" Content="+ Record Payment" Click="NewPayment_Click"/>
+        </Grid>
+        <Border Grid.Row="1" Style="{StaticResource Card}">
+            <DataGrid ItemsSource="{Binding Payments}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Receipt #" Binding="{Binding ReceiptNumber}" Width="140"/>
+                    <DataGridTextColumn Header="Date" Binding="{Binding PaymentDate, StringFormat=dd MMM yyyy}" Width="120"/>
+                    <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*"/>
+                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}Rs. {0:N0}}" Width="120"/>
+                    <DataGridTextColumn Header="Method" Binding="{Binding Method}" Width="120"/>
+                    <DataGridTextColumn Header="Purpose" Binding="{Binding Purpose}" Width="140"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>
