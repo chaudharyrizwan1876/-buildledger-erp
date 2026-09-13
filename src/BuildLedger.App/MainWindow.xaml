@@ -28,23 +28,30 @@
         <DataTemplate DataType="{x:Type vm:AboutViewModel}"><views:AboutView/></DataTemplate>
 
         <Style x:Key="NavItemStyle" TargetType="Button">
-            <Setter Property="Height" Value="42"/>
+            <Setter Property="Height" Value="44"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="{DynamicResource Brush.TextSidebar}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontSize" Value="13.5"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="Bd" CornerRadius="8" Margin="12,2" Background="{TemplateBinding Background}">
-                            <ContentPresenter Margin="14,0" VerticalAlignment="Center"/>
-                        </Border>
+                        <Grid Margin="8,2">
+                            <Border x:Name="Bd" CornerRadius="8" Background="{TemplateBinding Background}"/>
+                            <Rectangle x:Name="Accent" Width="4" HorizontalAlignment="Left" Margin="0,6" RadiusX="2" RadiusY="2"
+                                       Fill="{DynamicResource Brush.Accent}" Opacity="0"/>
+                            <ContentPresenter Margin="20,0,14,0" VerticalAlignment="Center"/>
+                        </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Brush.SidebarHover}"/>
                             </Trigger>
+                            <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                <Setter TargetName="Accent" Property="Opacity" Value="1"/>
+                            </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -53,6 +60,7 @@
                 <DataTrigger Binding="{Binding IsActive}" Value="True">
                     <Setter Property="Background" Value="{DynamicResource Brush.SidebarActive}"/>
                     <Setter Property="Foreground" Value="{DynamicResource Brush.TextSidebarActive}"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>

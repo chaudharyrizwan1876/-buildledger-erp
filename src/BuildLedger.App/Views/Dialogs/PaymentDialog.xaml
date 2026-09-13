@@ -1,7 +1,8 @@
 <Window x:Class="BuildLedger.App.Views.Dialogs.PaymentDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Record Payment" Height="680" Width="520" WindowStartupLocation="CenterOwner"
+        Title="Record Payment" Height="620" Width="540" MinHeight="480" MinWidth="460"
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize"
         Background="{DynamicResource Brush.Background}">
     <Grid Margin="24">
         <Grid.RowDefinitions>

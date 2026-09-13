@@ -1,7 +1,8 @@
 <Window x:Class="BuildLedger.App.Views.Dialogs.SaleDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="New Sale" Height="700" Width="880" WindowStartupLocation="CenterOwner"
+        Title="New Sale" Height="620" Width="800" MinHeight="540" MinWidth="720"
+        WindowStartupLocation="CenterOwner" ResizeMode="CanResize" SizeToContent="Manual"
         Background="{DynamicResource Brush.Background}">
     <Grid Margin="24">
         <Grid.RowDefinitions>

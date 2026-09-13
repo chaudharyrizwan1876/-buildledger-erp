@@ -33,7 +33,12 @@ public partial class LoginViewModel : ViewModelBase
         IsBusy = true;
         try
         {
-            var result = await _authService.LoginAsync(Username.Trim(), password);
+            // Keep the spinner visible for a perceptible moment even on a near-instant local login,
+            // so the user gets clear feedback that their click registered.
+            var loginTask = _authService.LoginAsync(Username.Trim(), password);
+            await Task.WhenAll(loginTask, Task.Delay(400));
+            var result = loginTask.Result;
+
             if (!result.Success)
             {
                 ErrorMessage = result.Error ?? "Login failed.";

@@ -65,3 +65,39 @@ User feedback after first visual review of the running app:
 
 Deferred, not yet done (unchanged from before): role-based UI restrictions per Owner/Admin/Cashier,
 and a change-password screen (the service method already exists).
+
+## 2026-09-13 (third pass) — dialog clipping fixes, sidebar active-state clarity
+Second round of screenshot feedback found several dialog windows were clipping their own content:
+- **Root cause**: several dialogs placed their form fields directly in a `Grid.Row="*"` StackPanel
+  with no `ScrollViewer`, and picked a fixed `Height` slightly smaller than the content actually
+  needs — so anything below the last field (often the Save button, or the bottom border of the last
+  TextBox) was cut off with no way to reach it. Confirmed on: Products & Units' "New Category"/"New
+  Unit" dialog (`SimpleInputDialog`), the New Supplier dialog, and the Inventory "Adjust Stock"
+  dialog.
+- **Fix**: wrapped every affected dialog's field area in a `ScrollViewer` (`SiteDialog`,
+  `SupplierDialog`, `StockAdjustmentDialog`, `UserDialog`, `ExpenseDialog`), switched
+  `SimpleInputDialog` to `SizeToContent="Height"` so it can never clip regardless of which fields
+  are shown, and made every dialog `ResizeMode="CanResize"` with sane `MinHeight`/`MinWidth` as a
+  safety net for smaller screens or larger system font scaling — previously several were hard-locked
+  to `NoResize` at a fixed size.
+- **New Sale / New Purchase / Record Payment / Product / Customer dialogs**: reduced default
+  `Height`/`Width` (Sale: 700x880 → 620x800, Purchase: 640x820 → 580x760, Payment: 680x520 → 620x540)
+  so they comfortably fit on smaller displays instead of needing to be clamped by Windows, which was
+  crowding the dialog's own title-bar buttons close to the main window's maximized title-bar buttons
+  and making them hard to tell apart.
+- **Sidebar active-item clarity**: added a solid left accent bar (amber, matches the design system's
+  existing accent color) plus bold text on whichever nav item is currently selected, on top of the
+  existing background highlight — so the active screen is unambiguous even if the highlight color
+  alone was hard to distinguish at a glance.
+- **Login button loading feedback**: the sign-in spinner could complete and disappear in well under
+  100ms against a local SQLite database, so it was easy to miss entirely. Added a 400ms minimum
+  visible duration for the busy state so the spinner is always perceptible.
+- **Visual polish**: added a soft drop shadow to all Card-style panels (dashboard KPI tiles, list
+  panels, forms) for a bit more depth/premium feel.
+- Rebuilt (0 warnings/errors) and re-ran the full test suite (26/26 passing) after all changes.
+
+Note on verification: attempted to drive the running app end-to-end via simulated mouse/keyboard
+in this sandboxed environment to capture before/after screenshots, but the automation targeted the
+wrong window and typed into this chat instead (visible as a stray "admin" message) — that attempt
+was abandoned immediately. These fixes are verified by code review and a clean rebuild/test run, but
+not by an in-app screenshot in this session; please confirm visually on your own machine.

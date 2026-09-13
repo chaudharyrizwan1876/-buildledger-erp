@@ -156,12 +156,15 @@
     </Style>
 
     <!-- Card -->
+    <DropShadowEffect x:Key="Shadow.Card" Color="#000000" Opacity="0.06" BlurRadius="16" ShadowDepth="3" Direction="270"/>
+
     <Style x:Key="Card" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource Brush.Surface}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="{StaticResource Radius.L}"/>
         <Setter Property="Padding" Value="18"/>
+        <Setter Property="Effect" Value="{StaticResource Shadow.Card}"/>
     </Style>
 
     <!-- Badge -->
