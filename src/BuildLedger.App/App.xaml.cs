@@ -1,8 +1,10 @@
 using System.IO;
 using System.Windows;
+using System.Windows.Threading;
 using BuildLedger.App.Services;
 using BuildLedger.App.ViewModels;
 using BuildLedger.App.Views;
+using BuildLedger.Application.Interfaces;
 using BuildLedger.Infrastructure;
 using BuildLedger.Infrastructure.Persistence;
 using BuildLedger.Infrastructure.Seed;
@@ -17,6 +19,9 @@ public partial class App : System.Windows.Application
 
     public static readonly string DataFolder =
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BuildLedgerERP");
+
+    private DispatcherTimer? _autoBackupTimer;
+    private DateTime _lastAutoBackupCheckDate = DateTime.MinValue;
 
     protected override async void OnStartup(StartupEventArgs e)
     {
@@ -70,6 +75,7 @@ public partial class App : System.Windows.Application
             }
         }
 
+        StartAutoBackupTimer();
         ShowLogin();
     }
 
@@ -85,6 +91,45 @@ public partial class App : System.Windows.Application
             window.Close();
         };
         window.Show();
+    }
+
+    /// <summary>
+    /// Checks once a minute whether it's time for the configured daily automatic backup.
+    /// Uses a fresh DI scope per check so it never holds a long-lived DbContext.
+    /// </summary>
+    private void StartAutoBackupTimer()
+    {
+        _autoBackupTimer = new DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
+        _autoBackupTimer.Tick += async (_, _) => await CheckAutoBackupAsync();
+        _autoBackupTimer.Start();
+    }
+
+    private async Task CheckAutoBackupAsync()
+    {
+        using var scope = AppHost.Services.CreateScope();
+        var settings = scope.ServiceProvider.GetRequiredService<ISettingsService>();
+        var backup = scope.ServiceProvider.GetRequiredService<IBackupService>();
+
+        var enabled = (await settings.GetAsync("AutoBackupEnabled")) == "true";
+        if (!enabled) return;
+
+        var configuredTime = await settings.GetAsync("AutoBackupTime") ?? "20:00";
+        if (!TimeSpan.TryParse(configuredTime, out var targetTime)) return;
+
+        var now = DateTime.Now;
+        if (now.TimeOfDay < targetTime || now.TimeOfDay >= targetTime.Add(TimeSpan.FromMinutes(1))) return;
+        if (_lastAutoBackupCheckDate.Date == now.Date) return;
+
+        var history = await backup.GetHistoryAsync();
+        var alreadyDoneToday = history.Any(h => !h.IsManual && h.BackupDateUtc.ToLocalTime().Date == now.Date);
+        if (alreadyDoneToday)
+        {
+            _lastAutoBackupCheckDate = now.Date;
+            return;
+        }
+
+        await backup.CreateBackupAsync(isManual: false);
+        _lastAutoBackupCheckDate = now.Date;
     }
 
     protected override async void OnExit(ExitEventArgs e)

@@ -26,11 +26,12 @@
                 <Button Content="This Week" Style="{StaticResource Button.Secondary}" Command="{Binding SetThisWeekCommand}" Margin="0,0,8,0"/>
                 <Button Content="This Month" Style="{StaticResource Button.Secondary}" Command="{Binding SetThisMonthCommand}" Margin="0,0,8,0"/>
                 <Button Content="Last Month" Style="{StaticResource Button.Secondary}" Command="{Binding SetLastMonthCommand}" Margin="0,0,8,0"/>
-                <Button Content="Run" Command="{Binding RunAllCommand}"/>
+                <Button Content="Run" Command="{Binding RunAllCommand}" Margin="0,0,8,0"/>
+                <Button Content="Print This Report" Style="{StaticResource Button.Secondary}" Click="PrintCurrentTab_Click"/>
             </StackPanel>
         </Border>
 
-        <TabControl Grid.Row="2" Background="Transparent" BorderThickness="0">
+        <TabControl x:Name="ReportTabs" Grid.Row="2" Background="Transparent" BorderThickness="0">
             <TabItem Header="Sales">
                 <Border Style="{StaticResource Card}">
                     <DataGrid ItemsSource="{Binding SalesReport}">

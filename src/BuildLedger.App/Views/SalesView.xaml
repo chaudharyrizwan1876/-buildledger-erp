@@ -32,6 +32,13 @@
                     <DataGridTextColumn Header="Paid" Binding="{Binding AmountPaid, StringFormat={}Rs. {0:N0}}" Width="110"/>
                     <DataGridTextColumn Header="Due" Binding="{Binding AmountDue, StringFormat={}Rs. {0:N0}}" Width="110"/>
                     <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110"/>
+                    <DataGridTemplateColumn Header="" Width="80">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Print" Style="{StaticResource Button.Secondary}" Padding="10,4" Click="PrintSale_Click" Tag="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

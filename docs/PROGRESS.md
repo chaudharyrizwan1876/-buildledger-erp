@@ -29,6 +29,39 @@
 - Wrote README, DATABASE_SCHEMA, USER_GUIDE, BACKUP_AND_RESTORE, RELEASE_NOTES, publish script,
   and an Inno Setup installer script.
 
-### Status: CORE SYSTEM COMPLETE AND TESTED — see docs/RELEASE_NOTES.md for known limitations
-(no invoice/report PDF/print yet, role-based UI gating not yet enforced, auto-backup timer and
-change-password UI not yet wired — everything else in the original spec is implemented and working)
+### Status: CORE SYSTEM COMPLETE AND TESTED — see docs/RELEASE_NOTES.md for remaining known
+limitations (role-based UI gating and change-password UI not yet wired — see below for the rest)
+
+## 2026-09-13 (later same day) — UX polish + printing + auto-backup
+User feedback after first visual review of the running app:
+- Sidebar nav text was unreadable — a global implicit `TextBlock` style in Typography.xaml was
+  force-setting dark `TextPrimary` foreground on every TextBlock, including the ones inside the
+  dark-background sidebar buttons, overriding the button's own (correct) light foreground. Fixed by
+  binding each nav item's TextBlock.Foreground to its parent Button's Foreground.
+- Sidebar scrollbar felt jerky — the previous ScrollBar style only forced `Width="8"` onto the
+  default OS template (never designed for that width), causing broken/glitchy rendering. Replaced
+  with a proper minimal custom ScrollBar template (clean draggable thumb, no arrow buttons) for both
+  orientations.
+- MainWindow opened at its normal (non-maximized) size by default, which read as "the app looks
+  tiny" — set `WindowState="Maximized"` as the default; the OS-standard restore/maximize toggle in
+  the title bar was otherwise already working correctly.
+- LoginWindow had `ResizeMode="NoResize"`, which hides the minimize/maximize title-bar buttons —
+  changed to `ResizeMode="CanResize"` so both are present, and added `MinHeight`/`MinWidth`.
+- Removed the "Default admin: admin / admin123" hint text below the sign-in button (credentials
+  belong in docs, not the login screen).
+- Implemented **invoice & report printing** (item 1 of the deferred list): a reusable
+  `InvoicePrintService` (FlowDocument + PrintDialog) prints a formatted sale invoice from the Sales
+  screen ("Print" per row) and any of the four Reports Center tabs ("Print This Report").
+- Implemented the **automatic daily backup timer** (item 3 of the deferred list): a
+  `DispatcherTimer` in `App.xaml.cs` checks once a minute (via a fresh DI scope) whether
+  `AutoBackupEnabled` is on and the current time matches `AutoBackupTime`, and — if no automatic
+  backup has run yet today — calls `IBackupService.CreateBackupAsync(isManual: false)`.
+- Added UI motion per request: a fade + slight slide-in animation plays on every screen navigation
+  (`MainWindow` content transition), a reusable rotating `LoadingSpinner` control, a global busy
+  overlay bound to the active screen's `IsBusy`, and a spinner + "Signing in..." state on the login
+  button while authenticating.
+- Re-ran the full test suite after all changes: still 26/26 passing. Full solution still builds
+  clean (0 warnings, 0 errors).
+
+Deferred, not yet done (unchanged from before): role-based UI restrictions per Owner/Admin/Cashier,
+and a change-password screen (the service method already exists).

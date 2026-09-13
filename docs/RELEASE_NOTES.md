@@ -32,10 +32,17 @@ ISCC.exe scripts/installer.iss
 ```
 Produces `dist/BuildLedgerERP-Setup-1.0.0.exe`.
 
+### Invoice/report printing & automatic backup
+- Sale invoices can be printed from the Sales screen ("Print" per row), and each Reports Center tab
+  can be printed via "Print This Report" — both use a FlowDocument + the standard Windows print
+  dialog (`InvoicePrintService`). PDF export specifically (as opposed to "print to a PDF printer",
+  which the OS print dialog already supports) is not separately implemented.
+- Automatic daily backup now actually runs: a background check (once a minute) fires
+  `IBackupService.CreateBackupAsync` when the current time reaches the configured `AutoBackupTime`
+  and no automatic backup has run yet that day, as long as "Enable automatic daily backup" is on in
+  Settings.
+
 ### Known limitations
-- **No invoice/report PDF export or print preview yet.** Sales/purchase invoices and reports are
-  viewable and filterable on-screen but cannot yet be printed or exported to PDF — this is the
-  single biggest gap against the full spec and is the recommended next increment.
 - **Permissions are role-gated conceptually (Owner/Admin/Cashier) but the UI does not yet hide or
   disable actions per role** — every signed-in user currently sees every screen. Enforcing this in
   the ViewModels/Views is a follow-up.
@@ -44,13 +51,12 @@ Produces `dist/BuildLedgerERP-Setup-1.0.0.exe`.
 - **Profit & Loss report** is intentionally not implemented — it requires complete, reliable cost
   and expense data first, per the "never show a fake profit figure" requirement. Sales, Payments,
   Receivables, and Supplier Balances reports are implemented and working.
-- Automatic daily backup is configurable in Settings but the scheduled trigger (a background timer
-  that fires at the configured time while the app is open) is not yet wired up — manual and
-  "Backup To Folder" both work today.
+- Purchase invoices are not yet printable (only Sales invoices and the four reports) — the same
+  `InvoicePrintService` pattern can be extended to `PurchasesView` in the same way.
 
 ### Recommended next steps
-1. Wire up FlowDocument-based printing/PDF export for sale/purchase invoices and the four reports.
-2. Enforce role-based UI restrictions (hide Users/Settings/Backup for Cashier role, etc.).
-3. Wire the auto-backup timer and the change-password dialog.
+1. Enforce role-based UI restrictions (hide Users/Settings/Backup for Cashier role, etc.).
+2. Wire the change-password dialog into Settings.
+3. Extend printing to purchase invoices.
 4. Add returns workflows (sale return / purchase return) with their own stock-movement types
    (already modeled in the schema, not yet exposed in the UI).

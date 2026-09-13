@@ -11,7 +11,14 @@ namespace BuildLedger.App.ViewModels;
 public partial class ReportsViewModel : ViewModelBase, IAsyncInitializable
 {
     private readonly IReportService _reportService;
-    public ReportsViewModel(IReportService reportService) => _reportService = reportService;
+    private readonly ISettingsService _settingsService;
+    public ReportsViewModel(IReportService reportService, ISettingsService settingsService)
+    {
+        _reportService = reportService;
+        _settingsService = settingsService;
+    }
+
+    public async Task<string> GetBusinessNameAsync() => await _settingsService.GetAsync("BusinessName") ?? "BuildLedger ERP";
 
     public ObservableCollection<SaleSummaryDto> SalesReport { get; } = new();
     public ObservableCollection<PaymentSummaryDto> PaymentsReport { get; } = new();

@@ -1,0 +1,24 @@
+<UserControl x:Class="BuildLedger.App.Views.LoadingSpinner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="28" Height="28">
+    <UserControl.Resources>
+        <Storyboard x:Key="Spin" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="Rotation" Storyboard.TargetProperty="Angle"
+                              From="0" To="360" Duration="0:0:0.8"/>
+        </Storyboard>
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Spin}"/>
+        </EventTrigger>
+    </UserControl.Triggers>
+    <Viewbox>
+        <Ellipse Width="28" Height="28" StrokeThickness="3" Stroke="{DynamicResource Brush.Primary}"
+                 StrokeDashArray="4 3" RenderTransformOrigin="0.5,0.5">
+            <Ellipse.RenderTransform>
+                <RotateTransform x:Name="Rotation" Angle="0"/>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+    </Viewbox>
+</UserControl>
