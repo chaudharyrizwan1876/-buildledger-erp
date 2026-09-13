@@ -10,7 +10,8 @@ public partial class NavItem : ObservableObject
     public string Key { get; }
     public string Label { get; }
     public string Icon { get; }
-    private readonly Action _navigate;
+    public bool IsHeader { get; }
+    private readonly Action? _navigate;
 
     [ObservableProperty] private bool isActive;
 
@@ -19,8 +20,14 @@ public partial class NavItem : ObservableObject
         Key = key; Label = label; Icon = icon; _navigate = navigate;
     }
 
+    /// <summary>Constructs a non-interactive section header row.</summary>
+    public NavItem(string headerText)
+    {
+        Key = string.Empty; Label = headerText; Icon = string.Empty; IsHeader = true;
+    }
+
     [RelayCommand]
-    private void Select() => _navigate();
+    private void Select() => _navigate?.Invoke();
 }
 
 public partial class MainViewModel : ObservableObject
@@ -45,20 +52,29 @@ public partial class MainViewModel : ObservableObject
 
         NavItems = new List<NavItem>
         {
-            new("Dashboard", "Dashboard", "", () => Navigate<DashboardViewModel>()),
-            new("Customers", "Customers", "", () => Navigate<CustomersViewModel>()),
-            new("Products", "Products & Units", "", () => Navigate<ProductsViewModel>()),
-            new("Suppliers", "Suppliers", "", () => Navigate<SuppliersViewModel>()),
-            new("Purchases", "Purchases", "", () => Navigate<PurchasesViewModel>()),
-            new("Sales", "Sales & Delivery", "", () => Navigate<SalesViewModel>()),
-            new("Payments", "Payments & Receipts", "", () => Navigate<PaymentsViewModel>()),
-            new("Inventory", "Inventory", "", () => Navigate<InventoryViewModel>()),
-            new("Expenses", "Expenses", "", () => Navigate<ExpensesViewModel>()),
-            new("Reports", "Reports Center", "", () => Navigate<ReportsViewModel>()),
-            new("Backup", "Backup & Restore", "", () => Navigate<BackupViewModel>()),
-            new("Users", "User Management", "", () => Navigate<UsersViewModel>()),
-            new("Settings", "Settings", "", () => Navigate<SettingsViewModel>()),
-            new("About", "About", "", () => Navigate<AboutViewModel>()),
+            new("OVERVIEW"),
+            new(nameof(DashboardViewModel), "Dashboard", "", () => Navigate<DashboardViewModel>()),
+
+            new("SALES & CUSTOMERS"),
+            new(nameof(CustomersViewModel), "Customers", "", () => Navigate<CustomersViewModel>()),
+            new(nameof(SalesViewModel), "Sales & Delivery", "", () => Navigate<SalesViewModel>()),
+            new(nameof(PaymentsViewModel), "Payments & Receipts", "", () => Navigate<PaymentsViewModel>()),
+
+            new("CATALOG & STOCK"),
+            new(nameof(ProductsViewModel), "Products & Units", "", () => Navigate<ProductsViewModel>()),
+            new(nameof(SuppliersViewModel), "Suppliers", "", () => Navigate<SuppliersViewModel>()),
+            new(nameof(PurchasesViewModel), "Purchases", "", () => Navigate<PurchasesViewModel>()),
+            new(nameof(InventoryViewModel), "Inventory", "", () => Navigate<InventoryViewModel>()),
+
+            new("FINANCE"),
+            new(nameof(ExpensesViewModel), "Expenses", "", () => Navigate<ExpensesViewModel>()),
+            new(nameof(ReportsViewModel), "Reports Center", "", () => Navigate<ReportsViewModel>()),
+
+            new("SYSTEM"),
+            new(nameof(BackupViewModel), "Backup & Restore", "", () => Navigate<BackupViewModel>()),
+            new(nameof(UsersViewModel), "User Management", "", () => Navigate<UsersViewModel>()),
+            new(nameof(SettingsViewModel), "Settings", "", () => Navigate<SettingsViewModel>()),
+            new(nameof(AboutViewModel), "About", "", () => Navigate<AboutViewModel>()),
         };
 
         _navigation.CurrentViewModelChanged += () =>

@@ -101,3 +101,35 @@ in this sandboxed environment to capture before/after screenshots, but the autom
 wrong window and typed into this chat instead (visible as a stray "admin" message) — that attempt
 was abandoned immediately. These fixes are verified by code review and a clean rebuild/test run, but
 not by an in-app screenshot in this session; please confirm visually on your own machine.
+
+## 2026-09-13 (fourth pass) — real sidebar-highlight bug fix + Figma-level visual pass
+Screenshot showed the Inventory screen open with **no** sidebar item highlighted at all — the
+previous "accent bar" fix (third pass) was necessary but not sufficient, because the underlying
+comparison was already broken:
+- **Root cause**: `NavItem.Key` values were short strings like `"Inventory"`, `"Dashboard"`, etc.,
+  but `INavigationService.CurrentKey` is set to `typeof(TViewModel).Name` (e.g.
+  `"InventoryViewModel"`). `item.Key == _navigation.CurrentKey` could never be true, so `IsActive`
+  was never set on any nav item — the highlight seen in earlier screenshots was just mouse-hover,
+  not the active indicator, which is why it looked like it "worked" sometimes and not others.
+- **Fix**: `NavItem` keys now use `nameof(DashboardViewModel)` etc., matching `CurrentKey` exactly,
+  so the active screen is reliably highlighted every time.
+
+Visual design pass (full sidebar redesign, "make it look Figma-designed"):
+- Added real navigation icons (Segoe Fluent Icons / Segoe MDL2 Assets glyphs) next to every label —
+  the `Icon` field on `NavItem` existed since the first build but was never actually rendered in
+  the sidebar template.
+- Grouped the 14 nav items into five labeled sections (Overview / Sales & Customers / Catalog &
+  Stock / Finance / System) with subtle uppercase section headers, instead of one long flat list —
+  gives the sidebar real information hierarchy.
+- Replaced the flat sidebar background color with a subtle top-to-bottom gradient
+  (`Brush.SidebarGradient`) for more depth, in both light and dark themes.
+- Refreshed the brand palette: primary blue → a richer indigo-blue (`#3654E0`), accent → a warmer
+  amber (`#F5A524`), sidebar hover/active tuned to stay legible against the new gradient.
+- User panel at the bottom of the sidebar now uses a translucent white overlay instead of a flat
+  hover-color block, reading as "glass" rather than a plain rectangle.
+
+Verification: full solution rebuild (0 warnings/errors) and full test suite (26/26 passing) after
+these changes. As in the previous pass, in-app screenshot verification is not reliable in this
+sandboxed environment — screen captures here show this coding session's own window, not the
+BuildLedger app window, so please confirm the sidebar and new visual design directly on your
+machine.

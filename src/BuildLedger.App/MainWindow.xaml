@@ -73,18 +73,20 @@
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
-        <Border Grid.Column="0" Background="{DynamicResource Brush.SidebarBg}">
+        <Border Grid.Column="0" Background="{DynamicResource Brush.SidebarGradient}">
             <DockPanel>
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,20,20,24">
-                    <Border Width="34" Height="34" CornerRadius="9" Background="{DynamicResource Brush.Primary}">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,20,20,20">
+                    <Border Width="36" Height="36" CornerRadius="10" Background="{DynamicResource Brush.Primary}">
                         <TextBlock Text="BL" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14"/>
                     </Border>
-                    <TextBlock Text="BuildLedger" FontSize="16" FontWeight="SemiBold" Foreground="White"
-                               VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <StackPanel VerticalAlignment="Center" Margin="10,0,0,0">
+                        <TextBlock Text="BuildLedger" FontSize="16" FontWeight="SemiBold" Foreground="White"/>
+                        <TextBlock Text="ERP" FontSize="10.5" Foreground="{DynamicResource Brush.TextSidebar}"/>
+                    </StackPanel>
                 </StackPanel>
 
                 <Border DockPanel.Dock="Bottom" Margin="12,8,12,16" Padding="14,12" CornerRadius="10"
-                        Background="{DynamicResource Brush.SidebarHover}">
+                        Background="#1AFFFFFF">
                     <StackPanel>
                         <TextBlock Text="{Binding UserFullName}" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
                         <TextBlock Text="{Binding UserRole}" Foreground="{DynamicResource Brush.TextSidebar}" FontSize="11.5" Margin="0,2,0,10"/>
@@ -96,10 +98,21 @@
                     <ItemsControl ItemsSource="{Binding NavItems}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Button Style="{StaticResource NavItemStyle}" Command="{Binding SelectCommand}">
-                                    <TextBlock Text="{Binding Label}"
-                                               Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
-                                </Button>
+                                <Grid>
+                                    <TextBlock Text="{Binding Label}" Style="{StaticResource Text.Caption}"
+                                               Foreground="{DynamicResource Brush.TextSidebar}" FontWeight="SemiBold"
+                                               Margin="22,18,12,8" Opacity="0.65"
+                                               Visibility="{Binding IsHeader, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    <Button Style="{StaticResource NavItemStyle}" Command="{Binding SelectCommand}"
+                                            Visibility="{Binding IsHeader, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Icon}" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="15" Width="20"
+                                                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                                            <TextBlock Text="{Binding Label}" Margin="10,0,0,0"
+                                                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

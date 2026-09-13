@@ -2,10 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Brand -->
-    <Color x:Key="Color.Primary">#1F5FBF</Color>
-    <Color x:Key="Color.PrimaryDark">#164A99</Color>
-    <Color x:Key="Color.PrimaryLight">#E8F0FC</Color>
-    <Color x:Key="Color.Accent">#D97706</Color>
+    <Color x:Key="Color.Primary">#3654E0</Color>
+    <Color x:Key="Color.PrimaryDark">#2740B8</Color>
+    <Color x:Key="Color.PrimaryLight">#EBEEFD</Color>
+    <Color x:Key="Color.Accent">#F5A524</Color>
+    <Color x:Key="Color.SidebarBgTop">#111A33</Color>
+    <Color x:Key="Color.SidebarBgBottom">#1B274A</Color>
 
     <!-- Semantic -->
     <Color x:Key="Color.Success">#15803D</Color>
@@ -22,8 +24,8 @@
     <Color x:Key="Color.Surface">#FFFFFF</Color>
     <Color x:Key="Color.SurfaceAlt">#F9FAFC</Color>
     <Color x:Key="Color.SidebarBg">#14213A</Color>
-    <Color x:Key="Color.SidebarHover">#1E2E52</Color>
-    <Color x:Key="Color.SidebarActive">#1F5FBF</Color>
+    <Color x:Key="Color.SidebarHover">#26325A</Color>
+    <Color x:Key="Color.SidebarActive">#3654E0</Color>
     <Color x:Key="Color.Border">#E2E6EC</Color>
     <Color x:Key="Color.BorderStrong">#C7CEDA</Color>
 
@@ -65,5 +67,10 @@
     <SolidColorBrush x:Key="Brush.TextOnPrimary" Color="{StaticResource Color.TextOnPrimary}"/>
     <SolidColorBrush x:Key="Brush.TextSidebar" Color="{StaticResource Color.TextSidebar}"/>
     <SolidColorBrush x:Key="Brush.TextSidebarActive" Color="{StaticResource Color.TextSidebarActive}"/>
+
+    <LinearGradientBrush x:Key="Brush.SidebarGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.SidebarBgTop}" Offset="0"/>
+        <GradientStop Color="{StaticResource Color.SidebarBgBottom}" Offset="1"/>
+    </LinearGradientBrush>
 
 </ResourceDictionary>

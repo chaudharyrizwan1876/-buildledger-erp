@@ -19,8 +19,10 @@
     <Color x:Key="Color.Surface">#171E2E</Color>
     <Color x:Key="Color.SurfaceAlt">#1E2637</Color>
     <Color x:Key="Color.SidebarBg">#0B101C</Color>
-    <Color x:Key="Color.SidebarHover">#1A2440</Color>
-    <Color x:Key="Color.SidebarActive">#4C8DFF</Color>
+    <Color x:Key="Color.SidebarHover">#212C4C</Color>
+    <Color x:Key="Color.SidebarActive">#4C6FFF</Color>
+    <Color x:Key="Color.SidebarBgTop">#080C16</Color>
+    <Color x:Key="Color.SidebarBgBottom">#141B30</Color>
     <Color x:Key="Color.Border">#2A3245</Color>
     <Color x:Key="Color.BorderStrong">#3B4560</Color>
 
@@ -60,5 +62,10 @@
     <SolidColorBrush x:Key="Brush.TextOnPrimary" Color="{StaticResource Color.TextOnPrimary}"/>
     <SolidColorBrush x:Key="Brush.TextSidebar" Color="{StaticResource Color.TextSidebar}"/>
     <SolidColorBrush x:Key="Brush.TextSidebarActive" Color="{StaticResource Color.TextSidebarActive}"/>
+
+    <LinearGradientBrush x:Key="Brush.SidebarGradient" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="{StaticResource Color.SidebarBgTop}" Offset="0"/>
+        <GradientStop Color="{StaticResource Color.SidebarBgBottom}" Offset="1"/>
+    </LinearGradientBrush>
 
 </ResourceDictionary>
