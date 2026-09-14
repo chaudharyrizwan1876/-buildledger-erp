@@ -1,8 +1,42 @@
+# Build output
 bin/
 obj/
+publish/
+dist/
+*.pdb
+
+# Local SQLite database and backups (never commit real business data)
 *.db
 *.db-shm
 *.db-wal
+src/BuildLedger.Infrastructure/*.db
+**/Backups/
+
+# IDE / editor
 .vs/
-publish/
-dist/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Test results / coverage
+TestResults/
+[Cc]overage/
+*.trx
+
+# NuGet
+*.nupkg
+**/packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# OS junk
+Thumbs.db
+.DS_Store
+
+# User secrets / local config overrides (do not commit real secrets)
+appsettings.*.local.json
+secrets.json
