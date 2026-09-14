@@ -14,7 +14,6 @@ src/BuildLedger.Infrastructure/*.db
 
 # IDE / editor
 .vs/
-.vscode/
 .idea/
 *.user
 *.suo
@@ -40,3 +39,5 @@ Thumbs.db
 # User secrets / local config overrides (do not commit real secrets)
 appsettings.*.local.json
 secrets.json
+config.bat
+node_modules
